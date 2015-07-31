@@ -33,6 +33,13 @@ function usage {
 	exit $1
 }
 
+function killed {
+	echo -e '\n'------ HEY! You interrupted me -----
+	summary 0
+}
+
+trap killed SIGINT SIGTERM # SIGINT = ctrl+c, SIGTERM = kill
+
 #global variables that holds user input
 COUNT=
 CMD=
@@ -87,7 +94,6 @@ else
 		eval $CMD
 		return_code=$?
 		RETURN_CODES[$return_code]=$(( RETURN_CODES[$return_code] + 1 ))
-		
 	done
 	
 	summary 0
