@@ -1,6 +1,7 @@
 #!/bin/bash
 
 function summary {
+
 	echo -e '\n'======summary======='\n'
 	# print how many times each return code returned and print the most frequesnt one
 	most_key=
@@ -22,11 +23,13 @@ function summary {
 }
 
 function usage {
+	
 	echo Usage: pingize.sh [Options] -cmd COMMAND
 	echo -e '\t'	-c NUMBER '\t'	the number of times to perform a command
 	echo -e '\t' '\t'	'\t'	by default it is 1 time
 	echo -e '\t'	-cmd COMMAND '\t'	the command to perform
 	echo -e '\t'	-h	'\t' '\t'	print this manual
+	echo -e '\t'	--debug '\t'		print each line of the script before it is executed
 	exit $1
 }
 
@@ -49,8 +52,12 @@ do
 		-h)
 		usage 0
 		;;
+		--debug)
+		echo debug flag detected
+		set -o xtrace
+		;;
 		*) # default case
-		echo not vald option
+		echo not valid option
 		usage 2
 		;;
 	esac
@@ -60,7 +67,6 @@ done
 #end of read user parameters
 
 declare -A RETURN_CODES # declare a hash table taht will hold the return codes as keys an return codes as values
-
 
 
 if [[ -z $CMD ]]
