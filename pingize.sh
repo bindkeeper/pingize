@@ -30,6 +30,8 @@ function usage {
 	echo -e '\t'	-cmd COMMAND '\t'	the command to perform
 	echo -e '\t'	-h	'\t' '\t'	print this manual
 	echo -e '\t'	--debug '\t'		print each line of the script before it is executed
+	echo -e '\t'	--failed-count N'\t'	N is the number of allowed failed
+	echo -e '\t\t\t\t' command invocation attempts before stopping the script
 	exit $1
 }
 
@@ -43,6 +45,7 @@ trap killed SIGINT SIGTERM # SIGINT = ctrl+c, SIGTERM = kill
 #global variables that holds user input
 COUNT=
 CMD=
+N_COUNT=
 
 # read user parameters
 while [[ $# > 0 ]] # travers on all parameters supplied to the script
@@ -62,6 +65,10 @@ do
 		--debug)
 		echo debug flag detected
 		set -o xtrace
+		;;
+		--failed-count)
+		N_COUNT="$2"
+		shift
 		;;
 		*) # default case
 		echo not valid option
@@ -88,11 +95,19 @@ else
 	else
 		my_count=$COUNT
 	fi
-	while [[ $my_count > 0 ]]
+	my_n_count=0
+
+	# this while will run $my_count times
+	# will stop after $N_COUNT failures (return code is not 0)
+	while [[ ( $my_count > 0 ) && ( ( -z $N_COUNT ) || ( $N_COUNT > $my_n_count ) ) ]]
 	do
 		((my_count--))
 		eval $CMD
 		return_code=$?
+		if [[ ( $N_COUNT ) && ( $return_code -ne 0 ) ]]
+		then 
+			((my_n_count++))
+		fi
 		RETURN_CODES[$return_code]=$(( RETURN_CODES[$return_code] + 1 ))
 	done
 	
