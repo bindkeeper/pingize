@@ -9,7 +9,7 @@ function summary {
 	for i in "${!RETURN_CODES[@]}"
 	do
 		value=${RETURN_CODES[$i]}
-		if [[ $most_value < $value ]]
+		if [[ $most_value -lt $value ]]
 		then 
 			most_value=$value
 			most_key=$i
