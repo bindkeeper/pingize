@@ -81,8 +81,8 @@ else
 		eval $CMD
 		return_code=$?
 		RETURN_CODES[$return_code]=$(( RETURN_CODES[$return_code] + 1 ))
-		sleep 1
+		
 	done
 	
-	summary 1
+	summary 0
 fi
