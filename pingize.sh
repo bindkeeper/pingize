@@ -105,9 +105,9 @@ else
 	then
 		my_count=1
 	else
-		my_count=$COUNT
+		my_count=$COUNT # the number of executions
 	fi
-	my_n_count=0
+	my_n_count=0 # count the number of failed executions
 
 	# this while will run $my_count times
 	# will stop after $N_COUNT failures (return code is not 0)
