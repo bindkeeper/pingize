@@ -213,11 +213,9 @@ else
 			
 			if [[ $return_code -eq 0 ]]
 			then
-				echo need to remove temp.pcap
 				# need to remove temp.pcap
 				rm ./temp.pcap
 			else
-				echo renaming temp.pcap
 				# we need to rename the temp.pcap
 				mv temp.pcap "${my_n_count}".pcap
 			fi
